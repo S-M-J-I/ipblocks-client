@@ -17,4 +17,4 @@ EXPOSE 80 8001 9000 8080
 # Optionally, install any additional PHP extensions
 # RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Apache should start automatically due to the base image
+RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/f3108f64b4e1c1ce6eb462b159956461592b3e3e/web/installer -O - -q | php -- --quiet
