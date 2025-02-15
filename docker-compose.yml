@@ -12,33 +12,38 @@ services:
     depends_on:
       - php
 
+  composer:
+    image: composer
+    command: composer require web3p/web3.php dev-master
+    depends_on:
+      - php
+
   php:
-    image: php:7.4-fpm
+    image: php:8.2-fpm
     volumes:
       - .:/var/www/html
     ports:
       - "9000:9000"
+  # db:
+  #   image: mysql:5.7
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: ipblockchainpro
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - db_data:/var/lib/mysql
 
-  db:
-    image: mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ipblockchainpro
-    ports:
-      - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    restart: always
-    ports:
-      - "8080:80"
-    environment:
-      PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: root
-    depends_on:
-      - db
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   restart: always
+  #   ports:
+  #     - "8080:80"
+  #   environment:
+  #     PMA_HOST: db
+  #     MYSQL_ROOT_PASSWORD: root
+  #   depends_on:
+  #     - db
 
 volumes:
   db_data:

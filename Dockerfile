@@ -1,5 +1,6 @@
 FROM nginx:latest
 
+
 # Remove default nginx configuration
 RUN rm /etc/nginx/conf.d/default.conf
 
@@ -13,8 +14,21 @@ COPY . /var/www/html
 WORKDIR /var/www/html
 
 # Expose port 80
-EXPOSE 80 8001 9000 8080
+
 # Optionally, install any additional PHP extensions
 # RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/f3108f64b4e1c1ce6eb462b159956461592b3e3e/web/installer -O - -q | php -- --quiet
+# RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/f3108f64b4e1c1ce6eb462b159956461592b3e3e/web/installer -O - -q | php -- --quiet
+
+# FROM composer
+
+# # RUN composer init
+# # RUN composer install
+
+# # RUN ls -l
+
+
+# RUN composer require web3p/web3.php dev-master
+# COPY composer.json composer.lock /var/www/html/
+
+# EXPOSE 80 8001 9000 8080
