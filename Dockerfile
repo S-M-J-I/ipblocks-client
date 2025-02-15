@@ -13,9 +13,8 @@ COPY . /var/www/html
 WORKDIR /var/www/html
 
 # Expose port 80
-EXPOSE 80
-
+EXPOSE 80 8001 9000 8080
 # Optionally, install any additional PHP extensions
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+# RUN docker-php-ext-install mysqli pdo pdo_mysql
 
 # Apache should start automatically due to the base image
