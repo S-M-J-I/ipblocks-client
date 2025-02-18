@@ -1,14 +1,12 @@
 <?php
 require '../vendor/autoload.php';
 
-// Using hello world contract
 
 use Web3\Contract;
 
 $contractAddress = "";
 $abi = '';
-$contract = new Contract('http://0.0.0.0:8545', $abi);
-// 
+$contract = new Contract('http://sol-container:8545', $abi);
 
 
 $contract->at($contractAddress)->call("getWord", function ($err, $result) {

@@ -1,5 +1,9 @@
 version: "3.8"
 
+networks:
+  ipblockchainpro:
+    external: true
+
 services:
   app:
     build:
@@ -9,19 +13,30 @@ services:
       - "8001:8001"
     volumes:
       - .:/var/www/html
+    env_file:
+      - .env
+    networks:
+      - ipblockchainpro
     depends_on:
       - php
 
   composer:
     image: composer
-    command: composer require web3p/web3.php dev-master
+    command: >
+      composer require web3p/web3.php dev-master && composer require supabase/supabase-php -W && composer require vlucas/phpdotenv
+    networks:
+      - ipblockchainpro
     depends_on:
       - php
 
   php:
     image: php:8.2-fpm
+    env_file:
+      - .env
     volumes:
       - .:/var/www/html
+    networks:
+      - ipblockchainpro
     ports:
       - "9000:9000"
   # db:
