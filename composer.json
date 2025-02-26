@@ -2,6 +2,7 @@
     "require": {
         "web3p/web3.php": "dev-master",
         "supabase/supabase-php": "^0.0.1",
-        "vlucas/phpdotenv": "^5.5"
+        "vlucas/phpdotenv": "^5.5",
+        "rafaelwendel/phpsupabase": "^0.0.8"
     }
 }

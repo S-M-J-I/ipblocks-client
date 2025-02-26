@@ -1,24 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search IP</title>
-</head>
-<body>
-    <h1>Search IP</h1>
-    <nav>
-        <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="publish.php">Publish IP</a></li>
-            <li><a href="search.php">Search IP</a></li>
-            <li><a href="transfer.php">Transfer IP</a></li>
-        </ul>
-    </nav>
-    <form action="search_process.php" method="get">
-        <label for="searchTerm">Search Term:</label><br>
-        <input type="text" id="searchTerm" name="searchTerm"><br><br>
-        <input type="submit" value="Search">
-    </form>
+<?php include "header.php" ?>
+<p>Account in use</p>
+<p id="accountAddress"></p>
+<form id="searchForm" onsubmit="return searchPatent(event)">
+    <label for="searchTerm">Search Term:</label><br>
+    <input type="text" id="searchTerm" name="searchTerm"><br><br>
+    <!-- <input type="submit" value="Search"> -->
+    <button type="submit">Search</button>
+</form>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
+<script src="./app.js"></script>
+
 </html>
