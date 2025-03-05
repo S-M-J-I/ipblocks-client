@@ -1,91 +1,139 @@
+const abi = []
+const contractAddress = ''
+const web3 = new Web3('')
+
 async function getWalletAddress() {
     if (window.ethereum) {
         try {
-            // Request account access if needed
-            await ethereum.request({ method: 'eth_requestAccounts' })
-            const web3 = new Web3(window.ethereum)
             const accounts = await web3.eth.getAccounts()
-            document.getElementById("accountAddress").innerText = accounts[0]
-            return accounts[0] // Return the first account
+            const fromAddress = accounts[0]
+            document.getElementById("accountAddress").innerText = fromAddress
+            return fromAddress // Return the first account
         } catch (error) {
             console.error("User denied account access or error occurred:", error)
             return null
         }
     } else {
-        console.error("MetaMask is not installed.")
+        console.error("Can't connect to blockchain network.")
         return null
     }
 }
 
-async function sendDataToBackend(event) {
-    event.preventDefault();
+async function publishIP(event) {
+    event.preventDefault()
 
     const walletAddress = await getWalletAddress()
     if (walletAddress) {
-
-        const form = document.getElementById('ipForm')
-        const formData = new FormData(form)
-        const inventors = [walletAddress]
-        formData.append('inventors', JSON.stringify(inventors))
-
-        const data = {}
-        formData.forEach((value, key) => {
-            if (key === "ipType") {
-                data[key] = parseInt(value)
-            } else {
-                data[key] = value
-            }
-        })
-        console.log(data)
         try {
-            const response = await fetch('publish_process.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
+            const form = document.getElementById('ipForm')
+            const formData = new FormData(form)
+            const inventors = [walletAddress]
+            formData.append('inventors', JSON.stringify(inventors))
 
-            const result = await response.json();
-            console.log("abi: " + result.result)
-            alert("Success")
+            const data = {}
+            formData.forEach((value, key) => {
+                if (key === "ipType") {
+                    data[key] = parseInt(value)
+                } else {
+                    data[key] = value
+                }
+            })
+            console.log(data)
+
+            const currentTime = Math.floor(Date.now() / 1000)
+            const initialFilingDate = currentTime
+            const publicationDate = currentTime
+            const originalExpirationDate = currentTime + (2 * 365 * 24 * 60 * 60) // assume expiry two years
+
+            const contract = new web3.eth.Contract(abi, contractAddress)
+
+            // console.log(walletAddress, fromAddress, (walletAddress === fromAddress))
+
+            const gasEstimate = await contract.methods.publishIP(
+                data.ipId,
+                data.ipTitle,
+                data.ipType,
+                initialFilingDate,
+                publicationDate,
+                originalExpirationDate,
+                inventors
+            ).estimateGas({ from: walletAddress })
+
+            const gasLimit = Math.floor(gasEstimate * 1.2)
+            console.log(`Estimated Gas: ${gasEstimate}, Gas Limit: ${gasLimit}`)
+
+            const transaction = await contract.methods.publishIP(
+                data.ipId,
+                data.ipTitle,
+                data.ipType,
+                initialFilingDate,
+                publicationDate,
+                originalExpirationDate,
+                inventors
+            ).send({
+                from: walletAddress,
+                gas: gasLimit
+            })
+
+            console.log('IP Published Successfully', transaction)
+            alert(`IP Published Successfully!\nTransaction Hash: ${transaction.transactionHash}`)
+
         } catch (err) {
-            console.log(err)
-            alert("Failed")
+            console.error('IP Publication Error:', err)
+
+            let errorMessage = 'IP Publication failed'
+            if (err.message.includes('no accounts')) {
+                errorMessage = 'Unable to find Ethereum accounts'
+            } else if (err.message.includes('invalid address')) {
+                errorMessage = 'Invalid Ethereum address provided'
+            } else if (err.message.includes('insufficient funds')) {
+                errorMessage = 'Insufficient funds for transaction'
+            } else if (err.message.includes('contract method')) {
+                errorMessage = 'Error calling contract method'
+            }
+
+            alert(errorMessage)
         }
     }
 }
 
 
 async function searchPatent(event) {
-    event.preventDefault();
+    event.preventDefault()
 
     const walletAddress = await getWalletAddress()
     if (walletAddress) {
-
-        const form = document.getElementById('searchForm')
-        const formData = new FormData(form)
-
-        const data = {}
-        formData.forEach((value, key) => {
-            data[key] = value
-        })
-        console.log(data)
         try {
-            const response = await fetch('search_process.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
+            const searchTermInput = document.getElementById('searchTerm')
+            const searchTerm = searchTermInput.value;
+            console.log(searchTerm)
 
-            const result = await response.json();
-            console.log(result.result)
-            alert("Success Search")
+            const contract = new web3.eth.Contract(abi, contractAddress)
+
+            const result = await contract.methods.getIpById(searchTerm).call({
+                from: walletAddress
+            })
+
+            if (result) {
+                console.log('Search Result:', result)
+                alert(`Success Search: ${result}`)
+            } else {
+                console.warn('No IP found with the given ID')
+                alert('No IP found with the given ID')
+            }
         } catch (err) {
-            console.log(err)
-            alert("Failed")
+            console.error('Search Process Error:', err)
+
+            let errorMessage = 'Search failed'
+            if (err.message.includes('Web3')) {
+                errorMessage = 'Web3 not loaded'
+            } else if (err.message.includes('User rejected')) {
+                errorMessage = 'Wallet connection was cancelled by user'
+            } else if (err.message.includes('contract method')) {
+                errorMessage = 'Error calling contract method'
+            }
+
+            alert(errorMessage)
         }
     }
 }

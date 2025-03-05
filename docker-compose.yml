@@ -23,7 +23,7 @@ services:
   composer:
     image: composer
     command: >
-      composer require web3p/web3.php dev-master && composer require supabase/supabase-php -W && composer require vlucas/phpdotenv
+      composer require supabase/supabase-php -W && composer require vlucas/phpdotenv
     networks:
       - ipblockchainpro
     depends_on:

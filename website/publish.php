@@ -2,7 +2,7 @@
 <p>Account in use</p>
 <p id="accountAddress"></p>
 <br />
-<form id="ipForm" onsubmit="return sendDataToBackend(event)">
+<form id="ipForm" onsubmit="return publishIP(event)">
     <label for="ipId">IP ID:</label><br>
     <input type="text" id="ipId" name="ipId"><br><br>
     <label for="ipTitle">IP Title:</label><br>
