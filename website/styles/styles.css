@@ -1,0 +1,11 @@
+@media (min-width: 768px) {
+    .card-container {
+        width: 40%;
+    }
+}
+
+@media (max-width: 767px) {
+    .card-container {
+        width: 90%;
+    }
+}

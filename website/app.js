@@ -1,507 +1,34 @@
-const abi = [
-    {
-        "inputs": [],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "newExpirationDate",
-                "type": "uint256"
+const abi = []
+const contractAddress = ''
+const web3 = new Web3('')
+
+async function getWalletAddresses() {
+    if (window.ethereum) {
+        try {
+            const accounts = await web3.eth.getAccounts()
+            if (accounts.length === 0) {
+                console.error("No accounts found.");
+                return;
             }
-        ],
-        "name": "IPExtended",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            },
-            {
-                "indexed": false,
-                "internalType": "enum IPBlockchainProContract.IPType",
-                "name": "ipType",
-                "type": "uint8"
-            },
-            {
-                "indexed": false,
-                "internalType": "address",
-                "name": "owner",
-                "type": "address"
-            }
-        ],
-        "name": "IPPublished",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            }
-        ],
-        "name": "IPRevoked",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            },
-            {
-                "indexed": false,
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-            }
-        ],
-        "name": "IPTransferred",
-        "type": "event"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "name": "IPs",
-        "outputs": [
-            {
-                "internalType": "enum IPBlockchainProContract.IPType",
-                "name": "ipType",
-                "type": "uint8"
-            },
-            {
-                "internalType": "string",
-                "name": "id",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "title",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "initialFilingDate",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "publicationDate",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "lastRenewalDate",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "timesRenewed",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "originalExpirationDate",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "adjustedExpirationDate",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bool",
-                "name": "isRevoked",
-                "type": "bool"
-            },
-            {
-                "internalType": "uint256",
-                "name": "modificationCount",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true
-    },
-    {
-        "inputs": [],
-        "name": "admin",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "modifications",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "dateRenewed",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "dateTransferred",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "dateRevoked",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "userAddresses",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "userIPs",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true
-    },
-    {
-        "inputs": [],
-        "name": "MostRecentGasFee",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "title",
-                "type": "string"
-            },
-            {
-                "internalType": "enum IPBlockchainProContract.IPType",
-                "name": "ipType",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "initialFilingDate",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "publicationDate",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "originalExpirationDate",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address[]",
-                "name": "_inventors",
-                "type": "address[]"
-            }
-        ],
-        "name": "publishIP",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            }
-        ],
-        "name": "getIpById",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "dateRenewed",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "dateTransferred",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "dateRevoked",
-                "type": "uint256"
-            }
-        ],
-        "name": "addModificationFiling",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "searchTerm",
-                "type": "string"
-            }
-        ],
-        "name": "searchIP",
-        "outputs": [
-            {
-                "internalType": "string[]",
-                "name": "",
-                "type": "string[]"
-            }
-        ],
-        "stateMutability": "pure",
-        "type": "function",
-        "constant": true
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            }
-        ],
-        "name": "verifyIP",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            },
-            {
-                "internalType": "address",
-                "name": "newOwner",
-                "type": "address"
-            }
-        ],
-        "name": "transferIP",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            }
-        ],
-        "name": "startAuctionIP",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            }
-        ],
-        "name": "endAuctionIP",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            }
-        ],
-        "name": "extendIP",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            }
-        ],
-        "name": "revokeIP",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "ipId",
-                "type": "string"
-            }
-        ],
-        "name": "getIPOwner",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true
-    },
-    {
-        "inputs": [],
-        "name": "addressSet",
-        "outputs": [
-            {
-                "internalType": "address[]",
-                "name": "",
-                "type": "address[]"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true
+            const dropdown = document.getElementById("accountDropdown");
+            dropdown.innerHTML = "";
+
+            accounts.forEach(account => {
+                const option = document.createElement("option");
+                option.value = account;
+                option.textContent = account;
+                dropdown.appendChild(option);
+            })
+
+        } catch (error) {
+            console.error("User denied account access or error occurred:", error)
+            return null
+        }
+    } else {
+        console.error("Can't connect to blockchain network.")
+        return null
     }
-]
-const contractAddress = '0x8a47EDc1C10934aE7e5B303FE5fB07977360B637'
-const web3 = new Web3('http://192.168.0.246:8545')
+}
 
 async function getWalletAddress() {
     if (window.ethereum) {
@@ -523,7 +50,7 @@ async function getWalletAddress() {
 async function publishIP(event) {
     event.preventDefault()
 
-    const walletAddress = await getWalletAddress()
+    const walletAddress = document.getElementById("accountAddress").innerText
     if (walletAddress) {
         try {
             const form = document.getElementById('ipForm')
@@ -597,6 +124,9 @@ async function publishIP(event) {
 
             alert(errorMessage)
         }
+    } else {
+        const errorMessage = `Wallet address ${walletAddress} not a valid wallet!`
+        alert(errorMessage)
     }
 }
 
@@ -604,7 +134,7 @@ async function publishIP(event) {
 async function searchPatent(event) {
     event.preventDefault()
 
-    const walletAddress = await getWalletAddress()
+    const walletAddress = document.getElementById("accountAddress").innerText
     if (walletAddress) {
         try {
             const searchTermInput = document.getElementById('searchTerm')
@@ -619,7 +149,7 @@ async function searchPatent(event) {
 
             if (result) {
                 console.log('Search Result:', result)
-                alert(`Success Search: ${result}`)
+                alert(`Search Success!`)
 
                 document.getElementById("searchResult").style.display = "block";
                 document.getElementById("searchTitle").innerText = result
@@ -642,7 +172,10 @@ async function searchPatent(event) {
 
             alert(errorMessage)
         }
+    } else {
+        const errorMessage = `Wallet address ${walletAddress} not a valid wallet!`
+        alert(errorMessage)
     }
 }
 
-getWalletAddress()
+window.onload = getWalletAddresses()

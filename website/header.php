@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($pageTitle) ? $pageTitle : 'IP Blockchain Pro'; ?></title>
+    <title><?php echo isset($pageTitle) ? $pageTitle : 'IPBlockchainPro'; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="./styles/styles.css" rel="stylesheet">
 </head>
+
 <body class="bg-gray-100">
-    <header class="bg-blue-500 text-white p-4">
-        <h1 class="text-3xl font-bold">IP Blockchain Pro</h1>
-        <nav class="mt-2">
-            <ul class="flex space-x-4">
-                <li><a href="index.php" class="hover:text-gray-200">Home</a></li>
-                <li><a href="publish.php" class="hover:text-gray-200">Publish IP</a></li>
-                <li><a href="search.php" class="hover:text-gray-200">Search IP</a></li>
-                <li><a href="transfer.php" class="hover:text-gray-200">Transfer IP</a></li>
-                <li><a href="login.php" class="hover:text-gray-200">Login</a></li>
-            </ul>
-        </nav>
-    </header>
-    <div class="container mx-auto py-8">
+
+    <nav class="bg-blue-600 text-white px-6 py-4 flex justify-between items-center shadow-md">
+        <h1 class="text-2xl font-bold">IPBlockchainPro</h1>
+        <div class="space-x-6">
+            <a href="index.php" class="hover:underline">Home</a>
+            <a href="publish.php" class="hover:underline">Publish IP</a>
+            <a href="search.php" class="hover:underline">Search IP</a>
+            <a href="transfer.php" class="hover:underline">Transfer IP</a>
+            <a href="login.php" class="hover:underline">Login</a>
+        </div>
+    </nav>
+
+    <div class="flex justify-center items-center h-screen">
