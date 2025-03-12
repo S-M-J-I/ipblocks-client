@@ -16,6 +16,15 @@
     <!-- <input type="submit" value="Publish"> -->
     <button type="submit">Publish</button>
 </form>
+<div id="afterPublish" style="display: none;">
+    <br />
+    <hr />
+    <br />
+    <div style="display: flex;">
+        <p>Transaction Hash: </p>
+        <p id="txnhash"></p>
+    </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
 <script src="./app.js"></script>
 </body>

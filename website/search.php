@@ -7,6 +7,15 @@
     <!-- <input type="submit" value="Search"> -->
     <button type="submit">Search</button>
 </form>
+<div id="searchResult" style="display: none">
+    <br />
+    <hr />
+    <br />
+    <div style="display: flex;">
+        <p>Title: </p>
+        <p id="searchTitle"></p>
+    </div>
+</div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
 <script src="./app.js"></script>
