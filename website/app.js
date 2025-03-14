@@ -1,24 +1,32 @@
 const abi = []
 const contractAddress = ''
 const web3 = new Web3('')
+const governmentAddress = ''
 
 async function getWalletAddresses() {
     if (window.ethereum) {
         try {
             const accounts = await web3.eth.getAccounts()
-            if (accounts.length === 0) {
-                console.error("No accounts found.");
-                return;
-            }
-            const dropdown = document.getElementById("accountDropdown");
-            dropdown.innerHTML = "";
 
-            accounts.forEach(account => {
-                const option = document.createElement("option");
-                option.value = account;
-                option.textContent = account;
-                dropdown.appendChild(option);
-            })
+            if (accounts.length === 0) {
+                console.error("No accounts found.")
+                return
+            }
+            const dropdown = document.getElementById("accountDropdown")
+            dropdown.innerHTML = ""
+
+            for (const account of accounts) {
+                const option = document.createElement("option")
+                option.value = account
+                option.textContent = account
+                dropdown.appendChild(option)
+                // console.log(balanceEth)
+            }
+
+            document.getElementById("accountAddress").innerText = accounts[0]
+            const balanceWei = await web3.eth.getBalance(accounts[0])
+            const balanceEth = web3.utils.fromWei(balanceWei, "ether")
+            document.getElementById("accountBalance").innerText = `${parseFloat(balanceEth).toFixed(4)} ETH`
 
         } catch (error) {
             console.error("User denied account access or error occurred:", error)
@@ -108,6 +116,10 @@ async function publishIP(event) {
             document.getElementById("afterPublish").style.display = "block"
             document.getElementById("txnhash").innerText = transaction.transactionHash
 
+            const balanceWei = await web3.eth.getBalance(walletAddress)
+            const balanceEth = web3.utils.fromWei(balanceWei, "ether")
+            document.getElementById("accountBalance").innerText = `${parseFloat(balanceEth).toFixed(4)} ETH`
+
         } catch (err) {
             console.error('IP Publication Error:', err)
 
@@ -138,7 +150,7 @@ async function searchPatent(event) {
     if (walletAddress) {
         try {
             const searchTermInput = document.getElementById('searchTerm')
-            const searchTerm = searchTermInput.value;
+            const searchTerm = searchTermInput.value
             console.log(searchTerm)
 
             const contract = new web3.eth.Contract(abi, contractAddress)
@@ -151,7 +163,7 @@ async function searchPatent(event) {
                 console.log('Search Result:', result)
                 alert(`Search Success!`)
 
-                document.getElementById("searchResult").style.display = "block";
+                document.getElementById("searchResult").style.display = "block"
                 document.getElementById("searchTitle").innerText = result
 
             } else {
@@ -166,6 +178,90 @@ async function searchPatent(event) {
                 errorMessage = 'Web3 not loaded'
             } else if (err.message.includes('User rejected')) {
                 errorMessage = 'Wallet connection was cancelled by user'
+            } else if (err.message.includes('contract method')) {
+                errorMessage = 'Error calling contract method'
+            }
+
+            alert(errorMessage)
+        }
+    } else {
+        const errorMessage = `Wallet address ${walletAddress} not a valid wallet!`
+        alert(errorMessage)
+    }
+}
+
+
+
+async function transferIP(event) {
+    event.preventDefault()
+
+    const walletAddress = document.getElementById("accountAddress").innerText
+    if (walletAddress) {
+        try {
+            const form = document.getElementById('transferForm')
+            const formData = new FormData(form)
+
+            const data = {}
+            formData.forEach((value, key) => {
+                if (key === "ipId") {
+                    data[key] = value
+                } else {
+                    data[key] = value
+                }
+            })
+            console.log(data)
+
+            const contract = new web3.eth.Contract(abi, contractAddress)
+
+            // console.log(walletAddress, fromAddress, (walletAddress === fromAddress))
+            const buyerWallet = data['newOwner']
+
+            // this is in ether
+            const price = await contract.methods.getIpPrice(data.ipId).call({
+                from: buyerWallet
+            })
+
+            const priceInWei = web3.utils.toWei(price, 'ether');
+            console.log("Price in wei:", priceInWei)
+
+            const gasEstimate = await contract.methods.transferIP(
+                data.ipId,
+                governmentAddress,
+            ).estimateGas({ from: buyerWallet, value: priceInWei })
+
+            console.log("Gas", gasEstimate)
+
+            const gasLimit = Math.floor(gasEstimate * 1.2)
+            console.log(`estimated gas: ${gasEstimate}, gas limit: ${gasLimit}`)
+
+            const transaction = await contract.methods.transferIP(
+                data.ipId,
+                governmentAddress
+            ).send({
+                from: buyerWallet,
+                value: priceInWei,
+                gas: gasLimit,
+            })
+
+            console.log('IP Published Successfully', transaction)
+            alert(`IP Published Successfully!\nTransaction Hash: ${transaction.transactionHash}`)
+            document.getElementById("afterPublish").style.display = "block"
+            document.getElementById("txnhash").innerText = transaction.transactionHash
+
+            const balanceWei = await web3.eth.getBalance(walletAddress)
+            const balanceEth = web3.utils.fromWei(balanceWei, "ether")
+            document.getElementById("accountBalance").innerText = `${parseFloat(balanceEth).toFixed(4)} ETH`
+
+        } catch (err) {
+            console.error('IP Publication Error:', err)
+
+            let errorMessage = 'IP Publication failed'
+            if (err.message.includes('no accounts')) {
+                errorMessage = 'Unable to find Ethereum accounts'
+            } else if (err.message.includes('invalid address')) {
+                errorMessage = 'Invalid Ethereum address provided'
+            } else if (err.message.includes('insufficient funds')) {
+                errorMessage = 'Insufficient funds for transaction'
             } else if (err.message.includes('contract method')) {
                 errorMessage = 'Error calling contract method'
             }

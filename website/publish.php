@@ -4,12 +4,8 @@ include_once "header.php"
 ?>
 
 <div class="bg-white p-8 rounded-xl shadow-lg w-96 card-container">
-    <h2 class="text-lg font-semibold text-gray-700 mb-4">Select Account</h2>
-    <select id="accountDropdown" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <option value="" disabled selected>Loading accounts...</option>
-    </select>
-    <p class="text-sm text-gray-500 mt-2">Selected: <span id="accountAddress" class="font-semibold text-gray-700"></span></p>
-
+    <?php include "./components/balancebar.php" ?>
+    <?php include "./components/accountsdropdown.php" ?>
 
     <form class="mt-6" id="ipForm" onsubmit="return publishIP(event)">
         <label class="block text-gray-700 font-medium mb-1" for="ipId">IP ID:</label>
@@ -29,14 +25,7 @@ include_once "header.php"
             Publish
         </button>
     </form>
-    <div id="afterPublish" class="hidden mt-6 bg-gray-50 p-4 rounded-lg shadow-inner">
-        <h3 class="text-md font-semibold text-gray-700 mb-2">Transaction Details</h3>
-        <hr class="mb-3">
-        <div class="flex">
-            <p class="font-medium text-gray-600">Hash: </p>
-            <p id="txnhash" class="ml-2 text-blue-600 font-mono truncate"></p>
-        </div>
-    </div>
+    <?php include "./components/transactioninfocard.php" ?>
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>

@@ -1,26 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transfer IP</title>
-</head>
-<body>
-    <h1>Transfer IP</h1>
-    <nav>
-        <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="publish.php">Publish IP</a></li>
-            <li><a href="search.php">Search IP</a></li>
-            <li><a href="transfer.php">Transfer IP</a></li>
-        </ul>
-    </nav>
-    <form action="transfer_process.php" method="post">
-        <label for="ipId">IP ID:</label><br>
-        <input type="text" id="ipId" name="ipId"><br><br>
-        <label for="newOwner">New Owner:</label><br>
-        <input type="text" id="newOwner" name="newOwner"><br><br>
-        <input type="submit" value="Transfer">
+<?php $pageTitle = "Transfer IP";
+include "header.php";
+?>
+<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md fade-in">
+    <h2 class="text-2xl font-semibold text-gray-700 text-center mb-6">Transfer IP</h2>
+    <?php include "./components/balancebar.php" ?>
+    <?php include "./components/accountsdropdown.php" ?>
+
+    <form id="transferForm" onsubmit="return transferIP(event)" class="space-y-4">
+        <div>
+            <label for="ipId" class="block text-gray-700 text-sm font-bold">IP ID:</label>
+            <input type="text" id="ipIdTransfer" name="ipId" class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+        </div>
+
+        <div class="flex items-center justify-between bg-white p-1">
+            <h4 class="text-md font-semibold text-gray-700">IP Price</h4>
+            <div class="flex items-center space-x-2">
+                <h4 class="text-md font-semibold text-blue-600" id="ipPrice">0.00 ETH</h4>
+            </div>
+        </div>
+
+        <div id="tranferAddrSection" class="hidden">
+            <label for="newOwner" class="block text-gray-700 text-sm font-bold">Transfer To:</label>
+            <input type="text" id="newOwner" name="newOwner" class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+        </div>
+
+        <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            Transfer IP
+        </button>
     </form>
-</body>
-</html>
+    <?php include "./components/transactioninfocard.php" ?>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
+<script src="./app.js"></script>
+<script src="./styles.js"></script>
+<?php include "footer.php" ?>
+
+<!-- // TODO: for transferIP function, we need to call it in reverse. i.e. implement front-end logic in such a way that the buyer calls the contract, not the seller. -->
+<!-- // TODO: maybe keep a button on the buyers side to accept the IP? then trigger the payment -->
