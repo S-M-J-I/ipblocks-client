@@ -30,10 +30,12 @@ async function getWalletAddresses() {
 
         } catch (error) {
             console.error("User denied account access or error occurred:", error)
+            showToast("User denied account access or error occurred:", "error")
             return null
         }
     } else {
         console.error("Can't connect to blockchain network.")
+        showToast("Can't connect to blockchain network.", "error")
         return null
     }
 }
@@ -112,7 +114,7 @@ async function publishIP(event) {
             })
 
             console.log('IP Published Successfully', transaction)
-            alert(`IP Published Successfully!\nTransaction Hash: ${transaction.transactionHash}`)
+            showToast(`IP Published Successfully`, 'success')
             document.getElementById("afterPublish").style.display = "block"
             document.getElementById("txnhash").innerText = transaction.transactionHash
 
@@ -134,11 +136,11 @@ async function publishIP(event) {
                 errorMessage = 'Error calling contract method'
             }
 
-            alert(errorMessage)
+            showToast(errorMessage, 'error')
         }
     } else {
         const errorMessage = `Wallet address ${walletAddress} not a valid wallet!`
-        alert(errorMessage)
+        showToast(errorMessage, 'error')
     }
 }
 
@@ -161,14 +163,14 @@ async function searchPatent(event) {
 
             if (result) {
                 console.log('Search Result:', result)
-                alert(`Search Success!`)
+                showToast(`IP Search Successful`, 'success')
 
                 document.getElementById("searchResult").style.display = "block"
                 document.getElementById("searchTitle").innerText = result
 
             } else {
                 console.warn('No IP found with the given ID')
-                alert('No IP found with the given ID')
+                showToast('No IP found with the given ID', 'error')
             }
         } catch (err) {
             console.error('Search Process Error:', err)
@@ -182,11 +184,11 @@ async function searchPatent(event) {
                 errorMessage = 'Error calling contract method'
             }
 
-            alert(errorMessage)
+            showToast(errorMessage, 'error')
         }
     } else {
         const errorMessage = `Wallet address ${walletAddress} not a valid wallet!`
-        alert(errorMessage)
+        showToast(errorMessage, 'error')
     }
 }
 
@@ -244,7 +246,7 @@ async function transferIP(event) {
             })
 
             console.log('IP Published Successfully', transaction)
-            alert(`IP Published Successfully!\nTransaction Hash: ${transaction.transactionHash}`)
+            showToast(`IP Published Successfully!\nTransaction Hash: ${transaction.transactionHash}`, 'success')
             document.getElementById("afterPublish").style.display = "block"
             document.getElementById("txnhash").innerText = transaction.transactionHash
 
@@ -266,11 +268,11 @@ async function transferIP(event) {
                 errorMessage = 'Error calling contract method'
             }
 
-            alert(errorMessage)
+            showToast(errorMessage, 'error')
         }
     } else {
         const errorMessage = `Wallet address ${walletAddress} not a valid wallet!`
-        alert(errorMessage)
+        showToast(errorMessage, 'error')
     }
 }
 
