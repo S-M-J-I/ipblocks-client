@@ -16,6 +16,7 @@
         <h1 class="text-2xl font-bold">IPBlockchainPro</h1>
         <div class="space-x-6">
             <a href="index.php" class="hover:underline">Home</a>
+            <a href="marketplace.php" class="hover:underline">Marketplace</a>
             <a href="publish.php" class="hover:underline">Publish IP</a>
             <a href="search.php" class="hover:underline">Search IP</a>
             <a href="transfer.php" class="hover:underline">Transfer IP</a>

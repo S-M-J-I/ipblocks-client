@@ -7,7 +7,7 @@ include "header.php" ?>
 
     <form id="searchForm" onsubmit="return searchPatent(event)">
         <label for="searchTerm" class="text-sm font-medium text-gray-600">Search Term:</label>
-        <input type="text" id="searchTerm" name="searchTerm" class="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter search term">
+        <input required type="text" id="searchTerm" name="searchTerm" class="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter search term">
         <button type="submit" class="w-full bg-blue-600 text-white font-semibold mt-4 py-2 rounded-lg hover:bg-blue-700">Search</button>
     </form>
 
@@ -19,10 +19,9 @@ include "header.php" ?>
             <p id="searchTitle" class="text-gray-800 font-semibold"></p>
         </div>
     </div>
+
+    <div id="toast-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
 </div>
-</body>
-<script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
-<script src="./app.js"></script>
-<script src="./styles.js"></script>
+<?php include "footer.php" ?>
 
 </html>

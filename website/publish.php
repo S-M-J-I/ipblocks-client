@@ -28,11 +28,6 @@ include_once "header.php"
     <?php include "./components/transactioninfocard.php" ?>
     <div id="toast-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
 </div>
-</div>
-<script src="./toast.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
-<script src="./app.js"></script>
-<script src="./styles.js"></script>
-</body>
+<?php include "footer.php" ?>
 
 </html>

@@ -9,7 +9,7 @@ include "header.php";
     <form id="transferForm" onsubmit="return transferIP(event)" class="space-y-4">
         <div>
             <label for="ipId" class="block text-gray-700 text-sm font-bold">IP ID:</label>
-            <input type="text" id="ipIdTransfer" name="ipId" class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+            <input required type="text" id="ipIdTransfer" name="ipId" class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
         </div>
 
         <div class="flex items-center justify-between bg-white p-1">
@@ -21,7 +21,7 @@ include "header.php";
 
         <div id="tranferAddrSection" class="hidden">
             <label for="newOwner" class="block text-gray-700 text-sm font-bold">Transfer To:</label>
-            <input type="text" id="newOwner" name="newOwner" class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+            <input required type="text" id="newOwner" name="newOwner" class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
         </div>
 
         <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -29,10 +29,9 @@ include "header.php";
         </button>
     </form>
     <?php include "./components/transactioninfocard.php" ?>
+
+    <div id="toast-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
-<script src="./app.js"></script>
-<script src="./styles.js"></script>
 <?php include "footer.php" ?>
 
 <!-- // TODO: for transferIP function, we need to call it in reverse. i.e. implement front-end logic in such a way that the buyer calls the contract, not the seller. -->
