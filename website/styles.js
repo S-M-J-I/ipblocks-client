@@ -11,9 +11,10 @@ document.getElementById("accountDropdown").addEventListener("change", async func
 // })
 
 document.getElementById("ipIdTransfer").addEventListener("change", async function () {
+    console.log("Called")
     const contract = new web3.eth.Contract(abi, contractAddress)
     const price = await contract.methods.getIpPrice(document.getElementById("ipIdTransfer").innerText).call({
-        from: document.getElementById("accountAddress").textContent
+        from: document.getElementById("accountAddress").innerText
     })
     document.getElementById("ipPrice").textContent = `${parseFloat(price).toFixed(2)} ETH`
     document.getElementById("tranferAddrSection").style.display = "block"

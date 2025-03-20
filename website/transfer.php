@@ -1,7 +1,7 @@
 <?php $pageTitle = "Transfer IP";
 include "header.php";
 ?>
-<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md fade-in">
+<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
     <h2 class="text-2xl font-semibold text-gray-700 text-center mb-6">Transfer IP</h2>
     <?php include "./components/balancebar.php" ?>
     <?php include "./components/accountsdropdown.php" ?>

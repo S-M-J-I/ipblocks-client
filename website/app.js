@@ -15,6 +15,50 @@ const abi = [
             },
             {
                 "indexed": false,
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "IPAuctionEnded",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "ipId",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "basePrice",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "IPAuctionStarted",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "ipId",
+                "type": "string"
+            },
+            {
+                "indexed": false,
                 "internalType": "uint256",
                 "name": "newExpirationDate",
                 "type": "uint256"
@@ -109,14 +153,14 @@ const abi = [
         "name": "IPs",
         "outputs": [
             {
-                "internalType": "enum IPBlockchainProContract.IPType",
-                "name": "ipType",
-                "type": "uint8"
-            },
-            {
                 "internalType": "string",
                 "name": "id",
                 "type": "string"
+            },
+            {
+                "internalType": "enum IPBlockchainProContract.IPType",
+                "name": "ipType",
+                "type": "uint8"
             },
             {
                 "internalType": "string",
@@ -183,6 +227,26 @@ const abi = [
     {
         "inputs": [],
         "name": "admin",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function",
+        "constant": true
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "name": "ipOwners",
         "outputs": [
             {
                 "internalType": "address",
@@ -397,6 +461,41 @@ const abi = [
                 "internalType": "string",
                 "name": "ipId",
                 "type": "string"
+            }
+        ],
+        "name": "getIpDetailsById",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "title",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function",
+        "constant": true
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "ipId",
+                "type": "string"
             },
             {
                 "internalType": "address payable",
@@ -548,7 +647,7 @@ const abi = [
 ]
 const contractAddress = ''
 const web3 = new Web3('')
-const governmentAddress = ''
+let governmentAddress = ''
 
 // TODO: refactor this entire codebase later on after paper writing!!!!!!!!!!
 
@@ -576,6 +675,9 @@ async function getWalletAddresses() {
             const balanceWei = await web3.eth.getBalance(accounts[0])
             const balanceEth = web3.utils.fromWei(balanceWei, "ether")
             document.getElementById("accountBalance").innerText = `${parseFloat(balanceEth).toFixed(4)} ETH`
+
+            governmentAddress = accounts[accounts.length - 1]
+            console.log("Govt address", governmentAddress)
 
         } catch (error) {
             console.error("User denied account access or error occurred:", error)
@@ -753,13 +855,10 @@ async function transferIP(event) {
                 from: buyerWallet
             })
 
-            const priceInWei = web3.utils.toWei(price, 'ether');
-            console.log("Price in wei:", priceInWei)
-
             const gasEstimate = await contract.methods.transferIP(
                 data.ipId,
                 governmentAddress,
-            ).estimateGas({ from: buyerWallet, value: priceInWei })
+            ).estimateGas({ from: buyerWallet, value: price })
 
             console.log("Gas", gasEstimate)
 
@@ -771,7 +870,7 @@ async function transferIP(event) {
                 governmentAddress
             ).send({
                 from: buyerWallet,
-                value: priceInWei,
+                value: price,
                 gas: gasLimit,
             })
 
@@ -809,7 +908,7 @@ async function transferIP(event) {
 async function auctionIP(event) {
     event.preventDefault()
 
-    const walletAddress = document.getElementById("accountAddress")
+    const walletAddress = document.getElementById("accountAddress").innerText
     if (walletAddress) {
         try {
             const contract = new web3.eth.Contract(abi, contractAddress)
@@ -831,11 +930,11 @@ async function auctionIP(event) {
             const priceInWei = web3.utils.toWei(price, 'ether');
             console.log("Price in wei:", priceInWei)
 
-            const gasEstimate = await contract.methods.startAuctionIP(data.ipId, data.basePrice).estimateGas({ from: walletAddress })
+            const gasEstimate = await contract.methods.startAuctionIP(data.ipId, priceInWei).estimateGas({ from: walletAddress })
 
             const transaction = await contract.methods.startAuctionIP(
                 data.ipId,
-                data.basePrice
+                priceInWei
             ).send({
                 from: walletAddress,
                 gas: gasEstimate
@@ -846,7 +945,7 @@ async function auctionIP(event) {
             document.getElementById("afterPublish").style.display = "block"
             document.getElementById("txnhash").innerText = transaction.transactionHash
 
-        } catch (error) {
+        } catch (err) {
             console.error('IP Publication Error:', err)
 
             let errorMessage = 'IP Publication failed'
@@ -865,6 +964,21 @@ async function auctionIP(event) {
     } else {
         const errorMessage = `Wallet address ${walletAddress} not a valid wallet!`
         showToast(errorMessage, 'error')
+    }
+}
+
+
+async function facilitateAuctionIP(event) {
+    const walletAddress = document.getElementById("accountAddress")
+    if (walletAddress) {
+        /**
+         * TODO: facilitate IP bidding off-chain
+         * TODO: store in the db, ipId, bid price (in eth), currentHighestBidder
+         * TODO: only allow bidding if it is not the current owner and bid price new > bid price curr
+         * TODO: connect with off-chain supabase for this part ONLY
+         */
+    } else {
+        showToast("Invalid wallet address")
     }
 }
 
@@ -930,26 +1044,37 @@ async function stopAuctionIP(event) {
     }
 }
 
-async function getAllAuctionIPs() {
-    const walletAddress = document.getElementById("accountAddress").innerText
+
+async function getDetailsById(ipId) {
+    console.log("Called", ipId.toString())
+
+    const walletAddress = governmentAddress
     if (walletAddress) {
         try {
-            const searchTermInput = document.getElementById('searchTerm')
-            const searchTerm = searchTermInput.value
-            console.log(searchTerm)
-
             const contract = new web3.eth.Contract(abi, contractAddress)
 
-            const auctionedIPs = await contract.methods.getAuctionedIPs().call({
+            const result = await contract.methods.getIpDetailsById(ipId.toString()).call({
                 from: walletAddress
             })
 
-            if (auctionedIPs) {
-                console.log('Search Result:', auctionedIPs)
-                showToast(`Retrieved all IPs`, 'success')
+            if (result) {
+                // console.log('Search Result:', result)
+                const title = result[1]
+                const owner = result[2]
+                const price = result[3]
+
+                const priceInEth = web3.utils.fromWei(price, "ether")
+
+                console.log(title, owner, priceInEth)
+
+                document.getElementById("ipDetails").innerText = `IP #${ipId}: ${title}`
+                document.getElementById("baseBidHolder").innerText = `Base bid: ${priceInEth} ETH`
+                // document.getElementById("ownedBy").innerText = owner
+                document.getElementById("ipPrice").innerText = `${priceInEth} ETH`
+
             } else {
-                console.warn('No IPs currently in marketplace')
-                showToast('No IPs currently in marketplace', 'error')
+                console.warn('No IP found with the given ID')
+                showToast('No IP found with the given ID', 'error')
             }
         } catch (err) {
             console.error('Search Process Error:', err)
@@ -966,6 +1091,65 @@ async function getAllAuctionIPs() {
             showToast(errorMessage, 'error')
         }
     } else {
+        const errorMessage = `Wallet address ${walletAddress} not a valid wallet!`
+        showToast(errorMessage, 'error')
+    }
+}
+
+async function getAllAuctionIPs() {
+    const walletAddress = governmentAddress
+    if (walletAddress) {
+        try {
+            const contract = new web3.eth.Contract(abi, contractAddress)
+
+            const auctionedIPs = await contract.methods.getAuctionedIPs().call({
+                from: walletAddress
+            })
+
+            if (auctionedIPs) {
+                console.log('Search Result:', auctionedIPs)
+                showToast(`Retrieved all IPs`, 'success')
+                const ids = auctionedIPs[0]
+                const titles = auctionedIPs[1]
+                const prices = auctionedIPs[2]
+                const marketplace = document.getElementById("marketplace");
+
+                for (let i = 0; i < ids.length; i++) {
+                    const card = document.createElement("div");
+                    card.className = "bg-white shadow-md rounded-lg p-4";
+                    const priceInEth = web3.utils.fromWei(prices[i], 'ether');
+
+                    card.innerHTML = `
+                        <h3 class="text-xl font-semibold text-gray-800">${titles[i]}</h3>
+                        <p class="text-gray-500 text-sm mt-1">ID: ${ids[i]}</p>
+                        <p class="text-blue-600 font-bold mt-2">${priceInEth} ETH</p>
+                        <br/>
+                        <a href="./ip_bid.php?ipId=${ids[i]}" target="blank" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">Bid Now</a>
+                    `;
+
+                    marketplace.appendChild(card);
+                }
+
+            } else if (auctionedIPs.length === 0) {
+                console.warn('No IPs currently in marketplace')
+                document.getElementById("msg").innerText = "No IPs currently in marketplace"
+            }
+        } catch (err) {
+            console.error('Search Process Error:', err)
+
+            let errorMessage = 'Search failed'
+            if (err.message.includes('Web3')) {
+                errorMessage = 'Web3 not loaded'
+            } else if (err.message.includes('User rejected')) {
+                errorMessage = 'Wallet connection was cancelled by user'
+            } else if (err.message.includes('contract method')) {
+                errorMessage = 'Error calling contract method'
+            }
+
+            showToast(errorMessage, 'error')
+        }
+    } else {
+        console.log("error here")
         const errorMessage = `Wallet address ${walletAddress} not a valid wallet!`
         showToast(errorMessage, 'error')
     }

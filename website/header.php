@@ -19,9 +19,10 @@
             <a href="marketplace.php" class="hover:underline">Marketplace</a>
             <a href="publish.php" class="hover:underline">Publish IP</a>
             <a href="search.php" class="hover:underline">Search IP</a>
+            <a href="auction.php" class="hover:underline">Auction IP</a>
             <a href="transfer.php" class="hover:underline">Transfer IP</a>
             <a href="login.php" class="hover:underline">Login</a>
         </div>
     </nav>
 
-    <div class="flex justify-center items-center h-screen">
+    <div class="flex justify-center items-center mt-9">
