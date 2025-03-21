@@ -126,6 +126,10 @@ const IPService = {
         }
     },
 
+    setAuctionBid: async function (ipId, bidPrice) {
+        // TODO: off-chain bid to preserve users eth
+    },
+
     /**
      * End IP auction
      */
@@ -164,7 +168,7 @@ const IPService = {
                 const owner = result[2];
                 const price = result[3];
                 // const [_, title, owner, price] = result;
-                const priceInEth = web3.utils.fromWei(price, "ether");
+                const priceInEth = web3.utils.fromWei(price.toString(), "ether");
 
                 console.log("IP Details:", title, owner, priceInEth);
 

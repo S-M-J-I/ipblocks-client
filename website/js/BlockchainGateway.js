@@ -3,6 +3,7 @@ import WalletService from "./WalletService.js"
 import ContractService from "./ContractService.js"
 import RouteHandler from "./RouteHandler.js"
 import EventEmitter from "./EventEmitter.js"
+import EventListeners from "./EventListeners.js"
 
 /**
  * The BlockchainGateway function to connect to the gateway. 
@@ -70,22 +71,7 @@ const BlockchainGateway = (function () {
             }
         }
 
-        // listen to dropdowns or input field selections
-        const dropdown = document.getElementById('accountDropdown')
-        if (dropdown) {
-            dropdown.addEventListener('change', function () {
-                WalletService.updateAccountInfo(this.value)
-            })
-        }
-
-        // transfer ip form input
-        const transferIPInput = document.getElementById("ipIdTransfer")
-        if (transferIPInput) {
-            transferIPInput.addEventListener('change', function () {
-                console.log("Called")
-                IPService.getIpValue()
-            })
-        }
+        EventListeners.listen()
     }
 
     return {

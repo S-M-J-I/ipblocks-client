@@ -1,6 +1,7 @@
 import UIAdapter from "./UIAdapter.js";
 import EventEmitter from "./EventEmitter.js";
 import ErrorHandler from "./ErrorHandler.js";
+import SECRET from "../db/const.js";
 
 /**
  * The service to handle wallet functions
@@ -28,7 +29,7 @@ const WalletService = {
 
         try {
             // web3 = new Web3(window.ethereum);
-            web3 = new Web3('')
+            web3 = new Web3(SECRET.web3_url)
             return true;
         } catch (error) {
             console.error("Failed to initialize Web3:", error);
