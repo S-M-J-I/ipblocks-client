@@ -6,7 +6,7 @@ include "header.php";
     <?php include "./components/balancebar.php" ?>
     <?php include "./components/accountsdropdown.php" ?>
 
-    <form id="transferForm" onsubmit="return transferIP(event)" class="space-y-4">
+    <form id="transferForm" class="space-y-4">
         <div>
             <label for="ipId" class="block text-gray-700 text-sm font-bold">IP ID:</label>
             <input required type="text" id="ipIdTransfer" name="ipId" class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">

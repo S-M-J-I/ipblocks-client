@@ -1,3 +1,5 @@
+import BlockchainGateway from "./js/BlockchainGateway.js"
+
 const abi = [
     {
         "inputs": [],
@@ -645,13 +647,23 @@ const abi = [
         "constant": true
     }
 ]
-const contractAddress = ''
-const web3 = new Web3('')
-let governmentAddress = ''
+const contractAddress = '0xe3291A99F914eF2060745826A8F0ac1D0254Fd4b'
 
-// TODO: refactor this entire codebase later on after paper writing!!!!!!!!!!
+document.addEventListener('DOMContentLoaded', async function () {
 
+    await BlockchainGateway.init(contractAddress, abi)
 
+    // subscribe to events
+    BlockchainGateway.EventEmitter.subscribe('transactionCompleted', (data) => {
+        console.log('Transaction completed:', data)
+    })
+
+    BlockchainGateway.EventEmitter.subscribe('error', (data) => {
+        console.error('Error occurred:', data)
+    })
+})
+
+/*
 async function getWalletAddresses() {
     if (window.ethereum) {
         try {
@@ -971,12 +983,6 @@ async function auctionIP(event) {
 async function facilitateAuctionIP(event) {
     const walletAddress = document.getElementById("accountAddress")
     if (walletAddress) {
-        /**
-         * TODO: facilitate IP bidding off-chain
-         * TODO: store in the db, ipId, bid price (in eth), currentHighestBidder
-         * TODO: only allow bidding if it is not the current owner and bid price new > bid price curr
-         * TODO: connect with off-chain supabase for this part ONLY
-         */
     } else {
         showToast("Invalid wallet address")
     }
@@ -1156,3 +1162,4 @@ async function getAllAuctionIPs() {
 }
 
 window.onload = getWalletAddresses()
+*/

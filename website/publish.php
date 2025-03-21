@@ -7,7 +7,7 @@ include_once "header.php"
     <?php include "./components/balancebar.php" ?>
     <?php include "./components/accountsdropdown.php" ?>
 
-    <form class="mt-6" id="ipForm" onsubmit="return publishIP(event)">
+    <form class="mt-6" id="ipForm">
         <label class="block text-gray-700 font-medium mb-1" for="ipId">IP ID:</label>
         <input type="text" id="ipId" name="ipId" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
 
