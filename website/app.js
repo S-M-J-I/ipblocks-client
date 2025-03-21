@@ -647,7 +647,7 @@ const abi = [
         "constant": true
     }
 ]
-const contractAddress = '0xe3291A99F914eF2060745826A8F0ac1D0254Fd4b'
+const contractAddress = ''
 
 document.addEventListener('DOMContentLoaded', async function () {
 
