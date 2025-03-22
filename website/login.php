@@ -3,9 +3,9 @@ include 'header.php'; ?>
 <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md fade-in">
     <h2 class="text-2xl font-semibold text-gray-700 text-center mb-6">Login</h2>
 
-    <form action="login_process.php" method="post" class="space-y-4">
+    <form id="userLoginForm" class="space-y-4">
         <div>
-            <label for="username" class="block text-gray-700 text-sm font-bold">Username/Email:</label>
+            <label for="username" class="block text-gray-700 text-sm font-bold">Username:</label>
             <input type="text" id="username" name="username" class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
         </div>
 
@@ -24,5 +24,7 @@ include 'header.php'; ?>
         <a href="admin_register.php" class="text-blue-500 hover:underline">Register as Admin</a> |
         <a href="owner_register.php" class="text-blue-500 hover:underline">Register as Patent Owner</a>
     </p>
+
 </div>
+<div id="toast-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
 <?php include 'footer.php'; ?>

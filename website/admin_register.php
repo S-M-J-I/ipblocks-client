@@ -30,5 +30,7 @@ include 'header.php'; ?>
         Already have an account?
         <a href="login.php" class="text-blue-500 hover:underline">Login</a>
     </p>
+
+    <div id="toast-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
 </div>
 <?php include 'footer.php'; ?>

@@ -1,3 +1,7 @@
-import DB from "./db/database/DB.js";
+import DBGateway from "./db/DBGateway.js"
 
-const _ = DB.getInstance()
+console.log("Called")
+
+document.addEventListener('DOMContentLoaded', async function () {
+    await DBGateway.init()
+})

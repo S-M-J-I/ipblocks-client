@@ -2,6 +2,21 @@
  * The factory to create form extraction/processing logic
 */
 const FormDataFactory = {
+    validateInput: function (input) {
+        return input.replace(/[<>&'"\\/]/g, function (match) {
+            const replacements = {
+                '<': '&lt;',
+                '>': '&gt;',
+                '&': '&amp;',
+                "'": '&#39;',
+                '"': '&quot;',
+                '\\': '\\\\',
+                '/': '\\/'
+            }
+            return replacements[match];
+        })
+    },
+
     /**
      * Create form data handling logic based on the form we want to extract information from
      * @param {*} formId 
@@ -13,13 +28,10 @@ const FormDataFactory = {
         const formData = new FormData(form)
         const data = {}
         formData.forEach((value, key) => {
-            // Handle specific type conversions
-            if (key === "ipType") {
-                data[key] = parseInt(value)
-            } else if (key === "basePrice" && formId === "auctionForm") {
-                data[key] = value // Keep as string for later conversion to wei
+            if (key === "role") {
+                data[key] = value === "owner" ? 0 : 1
             } else {
-                data[key] = value
+                data[key] = this.validateInput(value)
             }
         })
         console.log(`Form Data (${formId}):`, data)
