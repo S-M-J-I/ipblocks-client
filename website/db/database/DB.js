@@ -7,8 +7,8 @@ const DB = {
     getInstance: function () {
         if (!this.db) {
             this.db = createClient(
-                SECRET.db_url,
-                SECRET.api_key
+                SECRET.DB_URL,
+                SECRET.API_KEY
             )
         }
         return this.db

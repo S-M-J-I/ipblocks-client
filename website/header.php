@@ -21,7 +21,8 @@
             <a href="search.php" class="hover:underline">Search IP</a>
             <a href="auction.php" class="hover:underline">Auction IP</a>
             <a href="transfer.php" class="hover:underline">Transfer IP</a>
-            <a href="login.php" class="hover:underline">Login</a>
+            <a id="loginLink" href="login.php" class="hover:underline">Login</a>
+            <a id="dashboardLink" style="display: none;" href="dashboard.php" class="hover:underline">Dashboard</a>
         </div>
     </nav>
 

@@ -37,6 +37,11 @@ const UIAdapter = (function () {
                 toast.classList.add("opacity-0");
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
+        },
+
+        toggleModalSpinner: function () {
+            const modalSpinner = document.getElementById("loadingSpinner")
+            modalSpinner.style.display = modalSpinner.style.display === "none" ? "block" : "none"
         }
     };
 })();

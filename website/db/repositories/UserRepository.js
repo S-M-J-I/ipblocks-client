@@ -1,11 +1,24 @@
 import DB from "../database/DB.js"
+import ErrorHandler from "../ErrorHandler.js"
 
 const UserRepository = {
     create: async function (entity) {
-        return await DB.db
-            .from('users')
-            .insert(entity)
-            .select()
+        const { data, error } = await DB.db.auth.signUp({
+            email: entity['email'],
+            password: entity['password'],
+        })
+
+        if (error) {
+            ErrorHandler.handle("auth error", "Couldn't create user")
+        }
+
+        if (data) {
+            return await DB.db
+                .from('users')
+                .insert(entity)
+                .select()
+        }
+
     },
     findByUsernameAndPassword: async function (entity) {
         return await DB.db

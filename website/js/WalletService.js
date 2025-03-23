@@ -28,8 +28,8 @@ const WalletService = {
         }
 
         try {
-            // web3 = new Web3(window.ethereum);
-            web3 = new Web3(SECRET.web3_url)
+            web3 = new Web3(window.ethereum)
+            // web3 = new Web3(SECRET.WEB3_URL)
             return true;
         } catch (error) {
             console.error("Failed to initialize Web3:", error);
@@ -50,7 +50,7 @@ const WalletService = {
             await this.updateAccountInfo(accounts[0]);
 
             // Set government address (last account)
-            this.governmentAddress = accounts[accounts.length - 1];
+            this.governmentAddress = SECRET.GOVERNMENT_ADDRESS;
             console.log("Government address:", this.governmentAddress);
 
             // Emit wallet connected event

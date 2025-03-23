@@ -26,5 +26,5 @@ include 'header.php'; ?>
     </p>
 
 </div>
-<div id="toast-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
+<div id="toast-container" class="fixed top-10 right-5 space-y-2 z-50"></div>
 <?php include 'footer.php'; ?>
