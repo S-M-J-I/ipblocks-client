@@ -17,12 +17,15 @@
         <div class="space-x-6">
             <a href="index.php" class="hover:underline">Home</a>
             <a href="marketplace.php" class="hover:underline">Marketplace</a>
-            <a href="publish.php" class="hover:underline">Publish IP</a>
             <a href="search.php" class="hover:underline">Search IP</a>
-            <a href="auction.php" class="hover:underline">Auction IP</a>
-            <a href="transfer.php" class="hover:underline">Transfer IP</a>
+            <div id="dashboardLink" style="display: none;" class="space-x-6">
+                <a href="publish.php" class="hover:underline">Publish IP</a>
+                <a href="auction.php" class="hover:underline">Auction IP</a>
+                <a href="transfer.php" class="hover:underline">Transfer IP</a>
+                <a href="dashboard.php" class="hover:underline">Dashboard</a>
+                <a id="logoutLink" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" style="cursor: pointer;">Logout</a>
+            </div>
             <a id="loginLink" href="login.php" class="hover:underline">Login</a>
-            <a id="dashboardLink" style="display: none;" href="dashboard.php" class="hover:underline">Dashboard</a>
         </div>
     </nav>
 
