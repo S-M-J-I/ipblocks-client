@@ -3,6 +3,8 @@ import UIAdapter from "./UIAdapter.js";
 import WalletService from "./WalletService.js";
 import ContractService from "./ContractService.js";
 import ErrorHandler from "./ErrorHandler.js";
+import MarketplaceAddressRepository from "../db/repositories/MarketplaceAddressRepository.js";
+import DB from "../db/database/DB.js";
 
 /**
  * The Service to handle all IP related functions
@@ -117,6 +119,18 @@ const IPService = {
             const auctionData = FormDataFactory.create('auctionForm');
             const priceInWei = web3.utils.toWei(auctionData.basePrice, 'ether');
 
+            const ip = {
+                ip_id: auctionData.ipId,
+                bid_price: parseFloat(auctionData.basePrice),
+                owner_id: parseInt(window.localStorage.getItem('curr_id'))
+            }
+            console.log(ip)
+            const { data, error } = await MarketplaceAddressRepository.createMarketplaceEntry(ip)
+            if (error) {
+                ErrorHandler.handle(error, "Error adding to marketplace")
+                return
+            }
+
             // Prepare params
             const params = [auctionData.ipId, priceInWei];
 
@@ -128,6 +142,13 @@ const IPService = {
 
     setAuctionBid: async function (ipId, bidPrice) {
         // TODO: off-chain bid to preserve users eth
+        const { data, error } = await MarketplaceAddressRepository.setBidPrice(parseInt(ipId), parseFloat(bidPrice))
+        if (error) {
+            ErrorHandler.handle(error, "Coudln't set bid price")
+            return
+        }
+
+        return data
     },
 
     /**

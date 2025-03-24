@@ -20,6 +20,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             // handle token refreshed event
         }
     })
+    DB.getInstance()
+        .channel('bidding')
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'marketplace' }, (payload) => {
+            document.getElementById("ipPrice").innerText = `${payload['new']['bid_price']} ETH`
+        })
+        .subscribe()
+
     // await DB.db.auth.refreshSession()
 
     // data.subscription.unsubscribe()

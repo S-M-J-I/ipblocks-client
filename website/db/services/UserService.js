@@ -2,8 +2,10 @@ import FormDataFactory from "../FormDataFactory.js"
 import UIAdapter from "../UIAdapter.js"
 import ErrorHandler from "../ErrorHandler.js"
 import UserRepository from "../repositories/UserRepository.js"
+import WalletAddressRepository from "../repositories/WalletAddressRepository.js"
 import AuthService from "./AuthService.js"
 import DB from "../database/DB.js"
+import WalletService from "../../js/WalletService.js"
 
 const UserService = {
 
@@ -18,6 +20,7 @@ const UserService = {
 
         if (error) {
             ErrorHandler.handle(error, "Unexpected error")
+            return
         }
 
         if (data) {
@@ -32,6 +35,7 @@ const UserService = {
         const { data, error } = await UserRepository.findByUsernameAndPassword(user)
         if (error) {
             ErrorHandler.handle(error, "Error in login")
+            return
         }
 
         console.log(data)
@@ -42,6 +46,7 @@ const UserService = {
 
             if (authError) {
                 ErrorHandler.handle(error, "Error in login")
+                return
             }
 
             console.log(authData)
@@ -60,7 +65,6 @@ const UserService = {
             ErrorHandler.handle("404 (Not Found)", "Invalid username or password")
         }
     },
-
     userLogout: async function () {
         const { error } = await DB.db.auth.signOut()
         if (error) {
@@ -69,6 +73,57 @@ const UserService = {
             await DB.db.auth.refreshSession()
             window.localStorage.clear()
             window.location.href = './login.php'
+        }
+    },
+    getUserWalletsById: async function () {
+        const id = window.localStorage.getItem("curr_id")
+        if (!id) {
+            ErrorHandler.handle("No user is logged in", "Unauthorized")
+            return
+        }
+        const { data: userData, error: userError } = await UserRepository.findById(parseInt(id))
+        if (userError) {
+            ErrorHandler.handle(error, "Couldn't get user")
+            return
+        }
+
+        const user = userData[0]
+        if (!user) {
+            ErrorHandler.handle("Not Found", "User not found")
+            return
+        }
+
+        const { data: walletData, error: walletError } = await WalletAddressRepository.findWalletAddressesById(user['id'])
+
+        if (walletError) {
+            ErrorHandler.handle(err, "Coudn't get wallet addresses")
+            return
+        }
+
+        return walletData
+    },
+    addUserWallet: async function () {
+        const walletAddress = await WalletService.connectSpecificAccount()
+        document.getElementById("walletAddress").value = walletAddress
+
+        const id = window.localStorage.getItem("curr_id")
+        if (!id) {
+            ErrorHandler.handle("No user is logged in", "Unauthorized")
+            window.location.href = './login.php'
+            return
+        }
+
+        const formData = FormDataFactory.create("addWalletForm")
+
+        const { data, error } = await WalletAddressRepository.addWalletAddress(parseInt(id), formData['walletAddress'])
+        if (error) {
+            ErrorHandler.handle(error, "Couldn't add wallet")
+            return
+        }
+
+        if (data) {
+            UIAdapter.showToast("Added Wallet", "success")
+            window.location.reload()
         }
     }
 }

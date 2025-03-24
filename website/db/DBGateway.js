@@ -8,6 +8,7 @@ const DBGateway = (function () {
         const forms = {
             'ownerSignup': UserService.createOwner,
             'userLoginForm': UserService.userLogin,
+            'addWalletForm': UserService.addUserWallet,
         }
 
         for (const [formId, handler] of Object.entries(forms)) {

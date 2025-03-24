@@ -38,9 +38,9 @@ const EventListeners = {
                 }
                 console.log(ipId, " bidding ", bidPrice)
                 const res = await IPService.setAuctionBid(ipId, bidPrice)
-                if (res) {
-                    IPService.getIPDetails(ipId)
-                }
+                // if (res) {
+                //     IPService.getIPDetails(ipId)
+                // }
             })
         }
     }

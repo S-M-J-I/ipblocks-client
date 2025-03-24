@@ -3,7 +3,7 @@ import ErrorHandler from "../ErrorHandler.js"
 
 const UserRepository = {
     create: async function (entity) {
-        const { data, error } = await DB.db.auth.signUp({
+        const { data, error } = await DB.getInstance().auth.signUp({
             email: entity['email'],
             password: entity['password'],
         })
@@ -13,7 +13,7 @@ const UserRepository = {
         }
 
         if (data) {
-            return await DB.db
+            return await DB.getInstance()
                 .from('users')
                 .insert(entity)
                 .select()
@@ -21,12 +21,18 @@ const UserRepository = {
 
     },
     findByUsernameAndPassword: async function (entity) {
-        return await DB.db
+        return await DB.getInstance()
             .from('users')
-            .select('*')
+            .select()
             .eq('username', entity['username'])
             .eq('password', entity['password'])
-    }
+    },
+    findById: async function (id) {
+        return await DB.getInstance()
+            .from('users')
+            .select()
+            .eq('id', id)
+    },
 }
 
 export default UserRepository
