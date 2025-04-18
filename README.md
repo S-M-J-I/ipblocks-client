@@ -1,10 +1,7 @@
 # Fullstack repo of IPBlocks
 
 ### How to run
-At first, clone the repository:
-```sh
-git clone https://github.com/S-M-J-I/ipblocks-fullstack.git
-```
+At first, clone the repository.
 
 Make sure you have [Docker](https://docs.docker.com/engine/install/) installed.
 
