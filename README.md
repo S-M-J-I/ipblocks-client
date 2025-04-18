@@ -1,14 +1,23 @@
-# Fullstack repo of IPBlockchainPro
+# Fullstack repo of IPBlocks
+
+### How to run
+At first, clone the repository:
+```sh
+git clone https://github.com/S-M-J-I/ipblocks-fullstack.git
+```
+
+Make sure you have [Docker](https://docs.docker.com/engine/install/) installed.
+
+Next, simply open the terminal and run:
+```
+docker-compose up --build
+```
+
+After the Docker service is up, navigate to the link.
 
 ### Tech stack:
 * **Frontend**: HTML, CSS, JS
 * **Serverside**: PHP
 * **DB**: MySQL
-
-### User Authentication:
-The website now includes user authentication with two roles:
-*   **Government Admins**: Can manage the IP blockchain.
-*   **Patent Owners**: Can publish, search, and transfer IPs.
-
-Users can register and log in to access their respective dashboards.
-
+* **Reverse proxy**: Nginx
+* **Blockchain Gateway**: web3.js
