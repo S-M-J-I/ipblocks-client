@@ -5,6 +5,7 @@ import ContractService from "./ContractService.js";
 import ErrorHandler from "./ErrorHandler.js";
 import MarketplaceAddressRepository from "../db/repositories/MarketplaceAddressRepository.js";
 import DB from "../db/database/DB.js";
+import SECRET from "../db/const.js";
 
 /**
  * The Service to handle all IP related functions
@@ -34,6 +35,14 @@ const IPService = {
             const currentTime = Math.floor(Date.now() / 1000);
             const expirationDate = currentTime + (2 * 365 * 24 * 60 * 60); // 2 years
 
+            let ipfsDetails = await fetch(`http://${SECRET.SERVER_HOST}:${SECRET.SERVER_PORT}/upload`,
+                { method: "POST" }
+            )
+            const ipfsFile = await ipfsDetails.json()
+
+            // file hash
+            const cid = ipfsFile['cid']
+
             // Prepare params for contract call
             const params = [
                 ipData.ipId,
@@ -42,6 +51,7 @@ const IPService = {
                 currentTime, // initialFilingDate
                 currentTime, // publicationDate
                 expirationDate,
+                cid,
                 inventors
             ];
 
