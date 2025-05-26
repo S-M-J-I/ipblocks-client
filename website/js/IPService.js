@@ -135,6 +135,7 @@ const IPService = {
                 owner_id: parseInt(window.localStorage.getItem('curr_id'))
             }
             console.log(ip)
+            // for logs
             const { data, error } = await MarketplaceAddressRepository.createMarketplaceEntry(ip)
             if (error) {
                 ErrorHandler.handle(error, "Error adding to marketplace")
@@ -151,14 +152,28 @@ const IPService = {
     },
 
     setAuctionBid: async function (ipId, bidPrice) {
-        // TODO: off-chain bid to preserve users eth
-        const { data, error } = await MarketplaceAddressRepository.setBidPrice(parseInt(ipId), parseFloat(bidPrice))
-        if (error) {
-            ErrorHandler.handle(error, "Coudln't set bid price")
-            return
-        }
 
-        return data
+        const walletAddress = WalletService.getWalletAddress();
+        if (!walletAddress) return;
+
+        try {
+            const auctionData = FormDataFactory.create('auctionForm');
+            const priceInWei = web3.utils.toWei(auctionData.basePrice, 'ether');
+
+            const ip = {
+                ip_id: auctionData.ipId,
+                bid_price: parseFloat(auctionData.basePrice),
+                owner_id: parseInt(window.localStorage.getItem('curr_id'))
+            }
+            console.log(ip)
+
+            // Prepare params
+            const params = [auctionData.ipId, priceInWei];
+
+            return await ContractService.executeMethod('setIpPrice', params, walletAddress);
+        } catch (error) {
+            console.error('Start Auction Error:', error);
+        }
     },
 
     /**
